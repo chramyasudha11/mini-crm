@@ -1,0 +1,9 @@
+
+.idea/
+*.iml
+backend/target/
+backend/src/main/resources/application.properties
+backend/src/main/resources/application-local.properties
+.env
+.env.*
+!.env.example
