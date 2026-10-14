@@ -7,6 +7,7 @@ const API = "http://localhost:8080/api/customers";
 function App() {
   const [customers, setCustomers] = useState([]);
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("ALL");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [form, setForm] = useState({
@@ -95,10 +96,21 @@ function App() {
     }
   }
 
-  const filteredCustomers = customers.filter((customer) =>
-    [customer.name, customer.email, customer.company, customer.status]
-      .some((value) => (value || "").toLowerCase().includes(search.toLowerCase()))
-  );
+  const filteredCustomers = customers.filter((customer) => {
+    const matchesSearch = [
+      customer.name,
+      customer.email,
+      customer.company,
+      customer.status,
+    ].some((value) =>
+      (value || "").toLowerCase().includes(search.toLowerCase())
+    );
+
+    const matchesStatus =
+      statusFilter === "ALL" || customer.status === statusFilter;
+
+    return matchesSearch && matchesStatus;
+  });
 
   const leads = customers.filter((c) => c.status === "LEAD").length;
   const customersCount = customers.filter((c) => c.status === "CUSTOMER").length;
@@ -195,13 +207,30 @@ function App() {
           <section className="panel">
             <div className="list-heading">
               <div><h2>All customers</h2><p>{filteredCustomers.length} contacts in your workspace</p></div>
-              <input className="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="⌕  Search customers..." />
+              <div className="filters">
+                <input
+                  className="search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="⌕  Search customers..."
+                />
+
+                <select
+                  className="filter-select"
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
+                  <option value="ALL">All statuses</option>
+                  <option value="LEAD">Leads</option>
+                  <option value="CUSTOMER">Customers</option>
+                </select>
+              </div>
             </div>
             <div className="table-wrap">
               <table>
                 <thead><tr><th>NAME</th><th>COMPANY</th><th>EMAIL</th><th>STATUS</th><th>ACTIONS</th></tr></thead>
                 <tbody>
-                  {loading ? (
+                  s{loading ? (
                     <tr><td colSpan="5" className="empty">Loading customers...</td></tr>
                   ) : filteredCustomers.length === 0 ? (
                     <tr><td colSpan="5" className="empty">No customers found. Add a customer to get started.</td></tr>
