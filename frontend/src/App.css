@@ -361,4 +361,36 @@ footer { text-align: center; color: #a3a5b4; font-size: 10px; padding: 10px 0 22
   .list-heading { align-items: flex-start; flex-direction: column; }
   .search { max-width: none; }
 }
+.filters {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filter-select {
+  padding: 12px 14px;
+  border: 1px solid #d9dee8;
+  border-radius: 10px;
+  background: white;
+  font-size: 14px;
+  cursor: pointer;
+  min-width: 150px;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
+@media (max-width: 700px) {
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-select {
+    width: 100%;
+  }
+}
 
